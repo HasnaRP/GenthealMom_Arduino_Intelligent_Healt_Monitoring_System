@@ -1,12 +1,18 @@
+//=============================================================================
+//Project GEMASTIK 10 at University of Indonesia
+//Description: Main Code toInitialize devices in void Setup() and Call in Loop (SiL)
+//
+//Programmer: Imam Fatoni [aka Onet]   
+//version 1.9 
+//=============================================================================
 
 // Uncomment if you want test ALL Sensor and MQTT in Serial Monitor
 //#define DEBUG_MQTT
 //#define DEBUG_ALLSENSOR
 
 //====================================================================================================
-// Header Files
+// Include All Header Files
 //====================================================================================================
-
 #include "Gentheal_Mom.h"
 #include <SPI.h>
 #include "Adafruit_MQTT.h"
@@ -47,8 +53,8 @@ int status = WL_IDLE_STATUS;
 #define GENTHEALMOM_SERVERPORT        1883        
 #define GENTHEALMOM_USERNAME          ""  
 #define GENTHEALMOM_KEY               ""  
-char WLAN_SSID[] = "SSID";           
-char WLAN_PASS[] = "PASS";           
+char WLAN_SSID[] = "SSID";  // Your SSID 
+char WLAN_PASS[] = "PASS";  // Yous Password
 
 //================================== in this case assume using Wifi ESP-01,
 // you can try to use other network
@@ -93,7 +99,7 @@ byte heart[8] =
   0b00000
 };
 
-//=============================================== VARIABLES
+//=============================================== Volatile VARIABLES
 int blinkPin = 13;                  
 volatile int BPM;                  		  // used to hold the pulse rate
 volatile int Signal;                	  // holds the incoming raw data
@@ -115,6 +121,7 @@ void sendDataToProcessing(char symbol, int data ){
     Serial.print(symbol);               
     Serial.println(data);                
   }
+
 void interruptSetup(){     
   TCCR2A = 0x02;    
   TCCR2B = 0x06;     
@@ -140,9 +147,8 @@ void setup() {
 //===================== Loop
 void loop() {
  MQTT_connect();
- gdoAll();
+ doAll();
  PubtoWeb();
-
 }
 
 //==================== do Sensor Process
