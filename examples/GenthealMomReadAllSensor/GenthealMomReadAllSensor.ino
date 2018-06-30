@@ -1,7 +1,6 @@
 //=============================================================================
 //Project GEMASTIK 10 at University of Indonesia
 //Description: GenthealMomReadAllSensor is ones of the codes/examples to check all Sensor Gentheal Mom 
-//             August 12 2017
 //
 //Programmer: Imam Fatoni [aka Onet]   
 //
@@ -54,8 +53,6 @@ float euler[3];
 float ypr[3],yaw,pitch,roll,sumbuX,sumbuY,sumbuZ; 
 boolean manageMe=false;
 
-
-
 //===================================================================
 // Set up to Initialize all device
 //===================================================================
@@ -70,10 +67,13 @@ void setup() {
 
 //===================================================================
 // Loop
+// You can call function() in loop for examples adding read value MPU6050
+// to read value of Gyro (Yaw, Pitch and Roll)
 //===================================================================
 void loop() {
     PulseOximeterandSpo2();
     mysensor();
+    //getDataMpu();
 }
 
 void onBeatDetected()
