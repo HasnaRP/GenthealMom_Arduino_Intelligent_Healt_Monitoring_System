@@ -1,6 +1,13 @@
+//=========================================================================
+// Test code MQTT (ESP-01, Ethernet shield)
+//========================================================================
+
 #define DEBUG_MQTT
 #define DEBUG_ALLSENSOR
 
+//=========================================================================
+// Include Header Files
+//=========================================================================
 #include <Wire.h>
 #include "Gentheal_Mom.h"
 #include "I2Cdev.h"
@@ -15,35 +22,45 @@
 
 #define REPORTING_PERIOD_MS 1000
 
-/************************* Ethernet Client Setup *****************************/
 
+//=========================================================================
+// Ethernet Client Setup
+//=========================================================================
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
 IPAddress iotIP (192, 168, 1, 7);
 
-/************************* mqtt Setup *********************************/
-#define AIO_SERVER            "mqttsmartmococom-as.cloud.revoluz.io"  
-#define AIO_SERVERPORT        49330  
-#define AIO_USERNAME          ""  
+//=========================================================================
+//MQTT Setup
+//=========================================================================
+#define AIO_SERVER            "mqttsmartmococom-as.cloud.revoluz.io"  // update these
+#define AIO_SERVERPORT        49330  // update these
+#define AIO_USERNAME          ""    // you can try to add username and Key of MQTT protocol
 #define AIO_KEY               ""  
 
-
-/************ Global State (you don't need to change this!) ******************/
+//=========================================================================
+//Global State (you don't need to change this!)
 //Set up the ethernet client
+//=========================================================================
 EthernetClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
+
 // You don't need to change anything below this line!
 #define halt(s) { Serial.println(F( s )); while(1);  }
 
-/****************************** Feeds ***************************************/
+//=========================================================================
+//FEEDS
 // Setup a feed called 'photocell' for publishing.
 // Notice MQTT paths for AIO follow the form: <username>/feeds/<feedname>
+//=========================================================================
 Adafruit_MQTT_Publish Temperature = Adafruit_MQTT_Publish(&mqtt,  AIO_USERNAME "/feeds/photocell");
 Adafruit_MQTT_Publish Humidity = Adafruit_MQTT_Publish(&mqtt,AIO_USERNAME "/sensor/gps");
 Adafruit_MQTT_Publish Spo2 = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/sensor/mpuvalue");
 Adafruit_MQTT_Publish HeartRate = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/sensor/mpuvalue");
 
 
-/*************************** Sketch Code ************************************/
+//=========================================================================
+// Global Variables
+//=========================================================================
 GenthealMomSensorKit sevenEleven;
 PulseOximeter pox;
 uint32_t tsLastReport = 0;
@@ -75,11 +92,8 @@ void BME280Sensor(){
   uint32_t temperatureSendMillis = 0;
    if (millis() - temperatureSendMillis >= 15 * 1000) {
     temperatureSendMillis = millis();
-
-
   }
 }
-
 
 void PulseOximeterandSpo2(){
     pox.update();
@@ -89,4 +103,3 @@ void PulseOximeterandSpo2(){
      tsLastReport = millis();
     }
  }
-
