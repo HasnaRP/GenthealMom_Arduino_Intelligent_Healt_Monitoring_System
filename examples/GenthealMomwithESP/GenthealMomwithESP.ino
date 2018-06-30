@@ -1,53 +1,61 @@
+/***************************************************************************
+  This code use to tested wifi (ESP-01) and transmitted data packets to a cloud server 
+  Written by Imam Fatoni for GEMASSTIK 10 Project
+***************************************************************************/
+//=========================================================================
+// Header files
+//=========================================================================
 #include <WiFiEsp.h>
 #include <WiFiEspClient.h>
 #include <WiFiEspUdp.h>
-#include <PubSubClient.h>
+#include <PubSubClient.h> // use to publish and subsribe
 #include <SoftwareSerial.h>
 
+//=========================================================================
+// Dedine Pins SS and other pins
+//=========================================================================
+SoftwareSerial soft(8, 9);    // RX, TX
+const int PIR_pin = 3;     
 
 // Update these with values suitable for your network.
-
 char* ssid = "YOURSSID";
 char* password = "YOURPASSWORD";
 const char* mqtt_server = "YOURmqttSERVERip";
 const char* clientID = "YOURCLIENTID";
 const char* outTopic = "YOURCLIENTOUTTOPIC";
 const char* inTopic = "YOURCLIENTINTOPIC";
-
 int status = WL_IDLE_STATUS;   // the Wifi radio's status
 
 
-
-float humidity, temp_c;  // Values read from sensor
-// Generally, you should use "unsigned long" for variables that hold time
+//=======================================================================
+//Generally, you should use "unsigned long" for variables that hold time
+//=======================================================================
 unsigned long previousMillis = 0;        // will store last temp was read
 const long interval = 2000;              // interval at which to read sensor
- 
 WiFiEspClient espClient;
 PubSubClient client(espClient);
-char msg[50];
-
-SoftwareSerial soft(8, 9);    // RX, TX
-
-const int PIR_pin = 3;        
+char msg[50];   
 int Previous_Signal = LOW;
+float humidity, temp_c;  // Values read from sensor
 
+//=========================================================================
+// Setup to initialize devices
+//=========================================================================
 void setup() {
-  Serial.begin(115200);
-  soft.begin(9600);
-                              // initialize ESP module
+  Serial.begin(115200); // Serial Monitor Baudrate
+  soft.begin(9600);     // Baudrate for SS
+  // initialize ESP module
   WiFi.init(&soft);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-  
   pinMode(PIR_pin, INPUT);
 
 }
 
 void loop() {
   
-  int PIR_signal = digitalRead(PIR_pin);
+  int PIR_signal = digitalRead(PIR_pin);  // read condition of PIR
 
   if (PIR_signal == HIGH && Previous_Signal == LOW)
   {
@@ -65,9 +73,12 @@ void loop() {
   }
   
   delay(100);
-  client.loop();
+  client.loop();  
 }
 
+//=========================================================================
+// Initialize Wifi ESP-01 
+//=========================================================================
 void setup_wifi() {
 
   // check for the presence of the shield
@@ -76,7 +87,6 @@ void setup_wifi() {
     // don't continue
     while (true);
   }
-  
   delay(10);
   // We start by connecting to a WiFi network
   Serial.println();
