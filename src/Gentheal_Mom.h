@@ -28,7 +28,7 @@
 #define GENTHEAL_MOM_H
 
 //=============================================================================
-// Header Files
+// HEADER FILES
 //=============================================================================
 #include <Arduino.h>
 #include <Wire.h>
@@ -36,6 +36,7 @@
 #include <Adafruit_BME280.h>
 #include "MAX30100_PulseOximeter.h"
 #include <RTClib.h>
+
 #undef SECONDS_PER_DAY
 
 

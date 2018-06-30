@@ -6,7 +6,6 @@
 //Programmer: Imam Fatoni [aka Onet]   
 //
 // This version of the Gentheal Mom code was ported over to the Arduino Environement
-
 // This file must opened if you want try to check in Genthel Mom 1
 //=============================================================================
 
